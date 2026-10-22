@@ -1,0 +1,51 @@
+{
+    "name": "osc-bot",
+    "productName": "OSC Bot",
+    "version": "1.0.0",
+    "description": "Standalone VRChat OSC bot: chatbox status, now playing, PC stats, heart rate, weather, avatar sync, bindings, relays and a live monitor.",
+    "private": true,
+    "license": "Apache-2.0",
+    "author": "OSC Bot contributors",
+    "packageManager": "pnpm@10.17.0",
+    "main": "dist/main.cjs",
+    "scripts": {
+        "dev": "pnpm build:main && concurrently -k \"vite\" \"node dist/server.cjs --dev\"",
+        "build": "pnpm typecheck && vite build && pnpm build:main",
+        "build:main": "node ./scripts/build-main.mjs",
+        "start": "electron .",
+        "serve": "node dist/server.cjs",
+        "dist:win": "pnpm build && electron-builder --win portable nsis --x64 --publish never",
+        "typecheck": "tsc --noEmit",
+        "lint": "biome check .",
+        "format": "biome check --write .",
+        "test": "pnpm build:main && vitest run"
+    },
+    "dependencies": {
+        "ws": "8.21.3"
+    },
+    "devDependencies": {
+        "@biomejs/biome": "2.5.11",
+        "@preact/preset-vite": "2.10.5",
+        "@tailwindcss/vite": "4.3.3",
+        "@types/node": "24.13.3",
+        "@types/react": "19.2.18",
+        "@types/react-dom": "19.2.7",
+        "@types/ws": "8.18.1",
+        "concurrently": "9.2.1",
+        "electron": "44.6.0",
+        "electron-builder": "26.17.0",
+        "esbuild": "0.28.1",
+        "preact": "10.29.8",
+        "qrcode-generator": "2.0.4",
+        "tailwindcss": "4.3.3",
+        "typescript": "5.9.3",
+        "vite": "7.3.6",
+        "vitest": "4.1.11"
+    },
+    "pnpm": {
+        "onlyBuiltDependencies": [
+            "electron",
+            "esbuild"
+        ]
+    }
+}

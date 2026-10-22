@@ -1,0 +1,421 @@
+@import "tailwindcss";
+
+:root {
+    /* Native dropdowns, scrollbars and pickers follow the dark UI instead of Windows' light defaults. */
+    color-scheme: dark;
+    scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+    --deck-shell: #050608;
+    --deck-tint: none;
+    --deck-zoom: 1;
+    --deck-glow: 1;
+    --deck-bg: #07080b;
+    --deck-surface-0: rgba(20, 23, 31, 0.88);
+    --deck-surface-1: rgba(28, 32, 42, 0.85);
+    --deck-line: rgba(255, 255, 255, 0.06);
+    --deck-line-2: rgba(255, 255, 255, 0.1);
+    --deck-fg: #f2f4f8;
+    --deck-fg-2: #b6bccb;
+    --deck-fg-3: #7f8699;
+    --deck-fg-4: #535a6b;
+    --deck-accent: #00ffd5;
+}
+
+@layer base {
+    html,
+    body {
+        background: var(--deck-shell);
+        color: var(--deck-fg);
+        font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    ::selection {
+        background: color-mix(in oklab, var(--deck-accent) 35%, transparent);
+    }
+}
+
+@layer utilities {
+    .remote-scrollbar-hidden {
+        scrollbar-width: none;
+    }
+
+    .remote-scrollbar-hidden::-webkit-scrollbar {
+        display: none;
+    }
+
+    .remote-range {
+        appearance: none;
+        background: rgba(255, 255, 255, 0.06);
+        border-radius: 999px;
+        height: 4px;
+        outline: none;
+        accent-color: var(--deck-accent);
+    }
+
+    .remote-range::-webkit-slider-thumb {
+        appearance: none;
+        width: 16px;
+        height: 16px;
+        border-radius: 999px;
+        background: transparent;
+        border: 0;
+        box-shadow: none;
+    }
+
+    .remote-range::-moz-range-thumb {
+        width: 16px;
+        height: 16px;
+        border-radius: 999px;
+        background: transparent;
+        border: 0;
+        box-shadow: none;
+    }
+
+    .remote-glass-header {
+        background: linear-gradient(180deg, rgba(18, 20, 27, 0.72), rgba(10, 12, 17, 0.48));
+        border-color: rgba(255, 255, 255, 0.08);
+        box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 0.06),
+            0 14px 34px rgba(0, 0, 0, 0.22);
+        backdrop-filter: blur(24px) saturate(160%);
+    }
+
+    .remote-glass-drawer {
+        background: linear-gradient(180deg, rgba(17, 19, 26, 0.7), rgba(10, 12, 17, 0.52));
+        box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 0.06),
+            0 30px 80px rgba(0, 0, 0, 0.46);
+        backdrop-filter: blur(38px) saturate(165%);
+    }
+
+    .remote-drawer-overlay {
+        background: rgba(0, 0, 0, 0.45);
+        -webkit-backdrop-filter: blur(6px);
+        backdrop-filter: blur(6px);
+    }
+
+    .remote-drawer-panel {
+        background: linear-gradient(180deg, rgba(17, 19, 26, 0.9), rgba(10, 12, 17, 0.82));
+        box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 0.06),
+            0 30px 80px rgba(0, 0, 0, 0.46);
+        -webkit-backdrop-filter: blur(22px) saturate(155%);
+        backdrop-filter: blur(22px) saturate(155%);
+        transform: translateZ(0);
+        contain: layout paint style;
+        backface-visibility: hidden;
+    }
+
+    .remote-drawer-panel[data-open="true"] {
+        will-change: transform;
+    }
+
+    .remote-drawer-panel[data-open="false"] {
+        will-change: auto;
+    }
+
+    @media (pointer: coarse) {
+        .remote-drawer-overlay {
+            -webkit-backdrop-filter: none;
+            backdrop-filter: none;
+        }
+
+        .remote-drawer-panel {
+            background: linear-gradient(180deg, rgba(17, 19, 26, 0.97), rgba(10, 12, 17, 0.95));
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.055),
+                0 18px 48px rgba(0, 0, 0, 0.4);
+            -webkit-backdrop-filter: none;
+            backdrop-filter: none;
+        }
+
+        .remote-drawer-panel .remote-glass-header,
+        .remote-drawer-panel .remote-glass-control {
+            -webkit-backdrop-filter: none;
+            backdrop-filter: none;
+        }
+
+        .remote-glass-header {
+            -webkit-backdrop-filter: none;
+            backdrop-filter: none;
+        }
+
+        .remote-glass-control {
+            -webkit-backdrop-filter: none;
+            backdrop-filter: none;
+        }
+    }
+
+    .remote-glass-control {
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.036));
+        border-color: rgba(255, 255, 255, 0.105);
+        box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 0.055),
+            0 8px 24px rgba(0, 0, 0, 0.12);
+        backdrop-filter: blur(18px) saturate(150%);
+    }
+}
+
+@keyframes breathe {
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.4;
+    }
+}
+
+/* ---- OSC studio motion ------------------------------------------------------------------ */
+
+@keyframes osc-ripple {
+    0% {
+        opacity: 0.75;
+        transform: scale(0.7);
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(1.9);
+    }
+}
+
+@keyframes osc-flash {
+    0% {
+        box-shadow:
+            0 0 0 0 color-mix(in oklab, var(--deck-accent) 55%, transparent),
+            inset 0 0 0 1px color-mix(in oklab, var(--deck-accent) 60%, transparent);
+    }
+
+    100% {
+        box-shadow:
+            0 0 0 12px transparent,
+            inset 0 0 0 1px transparent;
+    }
+}
+
+@keyframes osc-typing {
+    0%,
+    80%,
+    100% {
+        opacity: 0.3;
+        transform: translateY(0);
+    }
+
+    40% {
+        opacity: 1;
+        transform: translateY(-3px);
+    }
+}
+
+@keyframes osc-progress {
+    from {
+        transform: scaleX(0);
+    }
+
+    to {
+        transform: scaleX(1);
+    }
+}
+
+@keyframes osc-rise {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes osc-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes osc-sweep {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@layer utilities {
+    .osc-orb-ring {
+        background: conic-gradient(from 0deg, transparent 0deg, var(--deck-accent) 90deg, transparent 160deg, transparent 360deg);
+        -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 1.5px));
+        mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 1.5px));
+        animation: osc-spin 3.2s linear infinite;
+    }
+
+    .osc-radar-sweep {
+        background: conic-gradient(from 0deg, color-mix(in oklab, var(--deck-accent) 45%, transparent), transparent 70deg);
+        animation: osc-sweep 1.6s linear infinite;
+    }
+
+    .osc-range {
+        appearance: none;
+        height: 4px;
+        border-radius: 999px;
+        background: linear-gradient(90deg, var(--deck-accent) 0 var(--fill, 0%), rgba(255, 255, 255, 0.08) var(--fill, 0%) 100%);
+        outline: none;
+        cursor: pointer;
+    }
+
+    .osc-range::-webkit-slider-thumb {
+        appearance: none;
+        width: 18px;
+        height: 18px;
+        border-radius: 999px;
+        background: var(--deck-fg);
+        border: 3px solid var(--deck-accent);
+        box-shadow: 0 0 10px color-mix(in oklab, var(--deck-accent) 55%, transparent);
+    }
+
+    .osc-range::-moz-range-thumb {
+        width: 14px;
+        height: 14px;
+        border-radius: 999px;
+        background: var(--deck-fg);
+        border: 3px solid var(--deck-accent);
+        box-shadow: 0 0 10px color-mix(in oklab, var(--deck-accent) 55%, transparent);
+    }
+
+    .osc-rise {
+        animation: osc-rise 260ms ease-out both;
+    }
+}
+
+/* ---- Appearance preferences (appearance-storage.ts sets these on <html>) ----------------- */
+
+:root[data-theme="oled"] {
+    --deck-shell: #000;
+    --deck-bg: #000;
+    --deck-surface-0: rgba(8, 8, 10, 0.94);
+    --deck-surface-1: rgba(16, 16, 20, 0.92);
+}
+
+:root[data-theme="nebula"] {
+    --deck-shell: #05030c;
+    --deck-bg: #0b0817;
+    --deck-fg-2: #c2bddb;
+    --deck-fg-3: #8d86ab;
+    --deck-fg-4: #5d5779;
+    --deck-tint:
+        radial-gradient(circle at 85% 10%, rgba(236, 72, 153, 0.13), transparent 40%),
+        radial-gradient(circle at 10% 90%, rgba(99, 102, 241, 0.16), transparent 45%);
+}
+
+:root[data-theme="slate"] {
+    --deck-shell: #0a0e14;
+    --deck-bg: #121822;
+    --deck-fg-2: #c3cad8;
+    --deck-fg-3: #8b95a8;
+    --deck-fg-4: #626b7c;
+    --deck-tint: linear-gradient(180deg, rgba(148, 163, 184, 0.06), transparent 35%);
+}
+
+/* Tailwind derives every padding, gap and control size from --spacing. */
+:root[data-density="compact"] {
+    --spacing: 0.215rem;
+}
+
+:root[data-density="roomy"] {
+    --spacing: 0.285rem;
+}
+
+:root[data-motion="reduced"] *,
+:root[data-motion="reduced"] *::before,
+:root[data-motion="reduced"] *::after {
+    /* Unlayered, so it outranks every Tailwind utility without !important. */
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+    transition-duration: 0.01ms;
+    scroll-behavior: auto;
+}
+
+@layer utilities {
+    .deck-glow {
+        opacity: var(--deck-glow, 1);
+        transition: opacity 300ms ease;
+    }
+
+    .deck-theme-tint {
+        background: var(--deck-tint);
+    }
+
+    .deck-scale {
+        zoom: var(--deck-zoom, 1);
+    }
+
+    .deck-content {
+        max-width: 980px;
+    }
+
+    .board-columns > section {
+        break-inside: avoid;
+    }
+
+    .board-columns {
+        columns: 460px;
+        column-gap: 12px;
+    }
+}
+
+:root[data-theme="sakura"] {
+    --deck-shell: #0d0710;
+    --deck-bg: #160b16;
+    --deck-fg-2: #e5c7d6;
+    --deck-fg-3: #a7869a;
+    --deck-fg-4: #6f5567;
+    --deck-tint:
+        radial-gradient(circle at 90% 0%, rgba(244, 114, 182, 0.18), transparent 40%),
+        radial-gradient(circle at 0% 100%, rgba(251, 207, 232, 0.08), transparent 45%);
+}
+
+@keyframes osc-heartbeat {
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    15% {
+        transform: scale(1.22);
+    }
+
+    30% {
+        transform: scale(0.96);
+    }
+
+    45% {
+        transform: scale(1.1);
+    }
+}
+
+@keyframes osc-eq {
+    0%,
+    100% {
+        transform: scaleY(0.3);
+    }
+
+    50% {
+        transform: scaleY(1);
+    }
+}
+
+select option,
+select optgroup {
+    background-color: #12151c;
+    color: var(--deck-fg);
+}
+
+select option:checked {
+    background-color: color-mix(in oklab, var(--deck-accent) 30%, #12151c);
+}
+
+select option:disabled {
+    color: var(--deck-fg-4);
+}
