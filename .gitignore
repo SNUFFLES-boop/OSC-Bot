@@ -1,0 +1,6 @@
+node_modules/
+dist/
+release/
+*.log
+osc-bot-dev.json
+osc-bot.json
